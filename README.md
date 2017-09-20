@@ -8,7 +8,9 @@
 > 介绍异常交易行为监控系统的技术架构
 异常交易行为监控系统主要分为交易指令处理层、事前风控子系统、事中风控子系统、事后风控子系统、风控的web子系统。异常交易行为监控系统直接拦截和旁路集中交易系统的用户交易指令，并交给不同的风控子系统处理。
 ![Alt text](https://github.com/JiuzhouSec/nightwatch/raw/master/Screenshots/jg.png)
+
 1.交易指令处理层
+
 交易指令处理层主要是衔接集中交易系统和下游事前风控子系统与事中风控子系统的桥梁。对于事前风控子系统，交易指令处理层将集中交易系统中拦截到的交易指令发送给事前风控子系统，并将事前风控子系统的对用户本次交易行为的处理结果返回给集中交易系统的应答队列。对于事中风控之系统，交易指令处理层将从集中交易系统旁路出来的用户交易指令发送给事中风控分析接入层，事中风控子系统接到用户的交易指令后对用户的交易行为进行风控模型的计算。
 集中交易系统指令旁路及拦截拓扑图：
 ![Alt text](https://github.com/JiuzhouSec/nightwatch/raw/master/Screenshots/jytp.png)
@@ -19,16 +21,20 @@ req_fk	事前风控过滤后的请求消息队列
 resp_fk	应答消息队列
 req_replica	应用请求消息的复制队列
 2. 事前风控子系统（目前处于未上线状态）
+
 事前风控可对交易指令先进行风险监控，通过监控的交易指令才提交给交易系统进行处理，未通过监控的交易指令将直接予以拒绝。事前风控要求处理时间很短（10ms以内）。业务应用方面，事前风控一般可用于对存在较高风险的特定接入渠道和特定投资者，在满足合规要求的前提下进行风险监控。
 事前风控流程图：
+
 ![Alt text](https://github.com/JiuzhouSec/nightwatch/raw/master/Screenshots/1.png)
 3. 事中风控子系统
+
 事中风控是指交易指令在提交给交易系统进行处理的同时，旁路同样的指令到事中风控子系统进行分析处理；当触发事中风控规则后，系统自动进行报警，由人工进行处置。事中风控一般需要在短时间内（50ms以内）对交易数据做出分析结果。
 事中风控流程图：
+
 ![Alt text](https://github.com/JiuzhouSec/nightwatch/raw/master/Screenshots/2.png)
 事中风控架构图：
-![Alt text](https://github.com/JiuzhouSec/nightwatch/raw/master/Screenshots/3.png)
 
+![Alt text](https://github.com/JiuzhouSec/nightwatch/raw/master/Screenshots/3.png)
 # 风控引擎
 > 介绍Storm和Esper
 storm介绍
